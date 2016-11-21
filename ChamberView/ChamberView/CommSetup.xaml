@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
 
         <!-- People list -->
-        <ComboBox Name="MyComboBox" IsEditable="True" IsReadOnly="True" Text="-- Select Team --" />
+        <Button Grid.Column="0" Grid.Row="0" Click="Button_Click1" Style="{StaticResource buttonStyle}">Read SP</Button>
 
 
         <Label Grid.Column="1" Style="{StaticResource headerTextStyle}" >

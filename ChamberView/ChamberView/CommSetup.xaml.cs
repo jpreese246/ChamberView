@@ -30,7 +30,7 @@ namespace ChamberView
             using (SerialPort port = new SerialPort(baudBaud))
             {
                 // configure serial port
-                port.BaudRate = 9600;
+                port.BaudRate = 9600; 
                 port.DataBits = 8;
                 port.Parity = Parity.None;
                 port.StopBits = StopBits.One;
@@ -42,12 +42,46 @@ namespace ChamberView
                 //ushort[] ReadHoldingRegisters(
                 byte slaveId = 1;
                 ushort startAddress = 300;
-                ushort value = 480;
+                ushort value = 680;
                 master.WriteSingleRegister(slaveId, startAddress, value);
-                ushort[] holding_register = master.ReadHoldingRegisters(slaveId, startAddress, 1);
+               
             }
 
         }
+
+
+        public static void ModbusSerialRtuMasterReadRegisters(string baudBaud)
+        {
+            using (SerialPort port = new SerialPort(baudBaud))
+            {
+                // configure serial port
+
+                port.BaudRate = 9600;
+                port.DataBits = 8;
+                port.Parity = Parity.None;
+                port.StopBits = StopBits.One;
+                port.Open();
+
+                // create modbus master
+                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(port);
+
+                byte slaveId = 1;
+                ushort startAddress = 300;
+                ushort numRegisters = 1;
+                ushort[] registers; //= new ushort[numRegisters]; 
+                string result;
+
+                // read registers
+                registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
+                result = Convert.ToString(registers[0]);
+                MessageBox.Show(result);
+
+            }
+       }
+
+
+
+
 
         public CommSetup()
         {
@@ -57,13 +91,19 @@ namespace ChamberView
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //string whif = comboBox1.Text;
-            string whif = "COM6";
+            string whif = "COM7";
             ModbusSerialRtuMasterWriteRegisters(whif);
         }
 
         private void MyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void Button_Click1(object sender, RoutedEventArgs e)
+        {
+            string whif = "COM7";
+            ModbusSerialRtuMasterReadRegisters(whif);
         }
     }
 }
